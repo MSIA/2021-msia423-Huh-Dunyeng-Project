@@ -1,5 +1,9 @@
 # MSiA423 Template Repository
 
+Author: Dunyeng Huh
+QA: Dennis Zhao
+
+
 <!-- toc -->
 
 - [Directory structure](#directory-structure)
