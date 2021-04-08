@@ -6,12 +6,12 @@
 #Charter
 
 #Vision
-Reading is such a splendid and high-end hobby that is slowly losing its place due to the blooming show industries and the success of video streaming platforms.
+- Reading is such a splendid and high-end hobby that is slowly losing its place due to the blooming show industries and the success of video streaming platforms.
 Video streaming platforms have had enormous success not only because of the variety of shows they offer but also because of their recommendation system.
-I want to make a recommendation system for books, so that people can have easier access to books they will enjoy and re-gain the habit of reading.  
+The goal of this application is to recommend books to its users, so that users can easily enjoy a good read and re-gain the habit of reading.  
 
 #Mission
-Users will enter 2-3 books that they have enjoyed in the past. The recommendation system would output 2~3 books that will likely match the users' taste.
+- Users will enter 2-3 books that they have enjoyed in the past. The recommendation system would output 2~3 books that will likely match the users' taste.
 The data comes from GoodReads (https://www.kaggle.com/meetnaren/goodreads-best-books,  https://www.kaggle.com/brosen255/goodreads-books)
 
 
