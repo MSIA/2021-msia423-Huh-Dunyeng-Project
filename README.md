@@ -1,7 +1,28 @@
 # MSiA423 Template Repository
 
-Author: Dunyeng Huh
-QA: Dennis Zhao
+#Author: Dunyeng Huh
+#QA: Dennis Zhao
+
+#Charter
+
+#Vision
+Reading is such a splendid and high-end hobby that is slowly losing its place due to the blooming show industries and video streaming platforms.
+I want to make a recommendation system for books, so that people can have easier access to great books and re-gain the habit of reading.  
+
+Mission
+When the users 
+
+
+Success criteria
+How will your business stakeholders (Fausto and Chloe) know the project was successful. What metric will you use to evaluate the performance of your model? What is the minimum value of that metric required for success?
+
+You should include two success criteria:
+
+The machine learning performance metric (e.g. accuracy, MSE, AUC, etc) that you will assess the model’s performance prior to deployment - what criteria is there for this metric that should be met before it can go live? (this can be negotiated later on).
+The metric that would actually measure the business outcome desired. This could be something like revenue, measures of user engagement, etc. Your app is sadly unlikely to be live long enough to measure this metric (though we would love if you kept it running forever!), but if it were, this what the true model performance and success would be based on.
+
+
+
 
 
 <!-- toc -->
