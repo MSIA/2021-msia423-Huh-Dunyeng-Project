@@ -11,17 +11,14 @@ Video streaming platforms have had enormous success not only because of the vari
 I want to make a recommendation system for books, so that people can have easier access to books they will enjoy and re-gain the habit of reading.  
 
 #Mission
-Users will enter 2-3 books that they have enjoyed in the past. The recommendation system would output 2~3 books that will likely match the users' taste
+Users will enter 2-3 books that they have enjoyed in the past. The recommendation system would output 2~3 books that will likely match the users' taste.
+The data comes from GoodReads (https://www.kaggle.com/meetnaren/goodreads-best-books,  https://www.kaggle.com/brosen255/goodreads-books)
 
 
+#Success criteria
+1. Since we do not know how highly users will rate the book, the app will focus on 'explainability' as the main criteria. When faced with the model output, the users should be able to understand why such books were recommended to them. 
 
-Success criteria
-How will your business stakeholders (Fausto and Chloe) know the project was successful. What metric will you use to evaluate the performance of your model? What is the minimum value of that metric required for success?
-
-You should include two success criteria:
-
-The machine learning performance metric (e.g. accuracy, MSE, AUC, etc) that you will assess the model’s performance prior to deployment - what criteria is there for this metric that should be met before it can go live? (this can be negotiated later on).
-The metric that would actually measure the business outcome desired. This could be something like revenue, measures of user engagement, etc. Your app is sadly unlikely to be live long enough to measure this metric (though we would love if you kept it running forever!), but if it were, this what the true model performance and success would be based on.
+2. Business Metric: The app will show users the name of the book and link to the site where the user can purchase the book. In the longrun, we would like to record the click-through rate of the link and sales conversion rate as well. 
 
 
 
