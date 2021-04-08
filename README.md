@@ -6,11 +6,13 @@
 #Charter
 
 #Vision
-Reading is such a splendid and high-end hobby that is slowly losing its place due to the blooming show industries and video streaming platforms.
-I want to make a recommendation system for books, so that people can have easier access to great books and re-gain the habit of reading.  
+Reading is such a splendid and high-end hobby that is slowly losing its place due to the blooming show industries and the success of video streaming platforms.
+Video streaming platforms have had enormous success not only because of the variety of shows they offer but also because of their recommendation system.
+I want to make a recommendation system for books, so that people can have easier access to books they will enjoy and re-gain the habit of reading.  
 
-Mission
-When the users 
+#Mission
+Users will enter 2-3 books that they have enjoyed in the past. The recommendation system would output 2~3 books that will likely match the users' taste
+
 
 
 Success criteria
