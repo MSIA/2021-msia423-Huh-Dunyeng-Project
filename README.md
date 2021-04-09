@@ -10,7 +10,7 @@
 
 #Mission
 - Users will enter 2-3 books that they have enjoyed in the past. The recommendation system would output 2~3 books that will likely match the users' taste.
-The main dataset comes from GoodReads. (https://www.kaggle.com/meetnaren/goodreads-best-books,  https://www.kaggle.com/brosen255/goodreads-books)
+The main dataset comes from GoodReads(https://www.goodreads.com/list/show/1.Best_Books_Ever).
 
 
 #Success criteria
