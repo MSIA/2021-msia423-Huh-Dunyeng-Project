@@ -1,25 +1,24 @@
 # MSiA423 Template Repository
 
-#Author: Dunyeng Huh
-#QA: Dennis Zhao
+### Author: Dunyeng Huh
+### QA: Dennis Zhao
 
-#Charter
+## Charter
 
-#Vision
+### Vision
 - Reading is a splendid and traditional hobby that is slowly losing its place due to the blooming show industries and the success of video streaming platforms. However, the abundance of shows and movies might only be a factor why people are not reading books. While video streaming platforms have had enormous success due to their recommendation systems, we have not yet seen one for good reads! The goal of this application is to recommend books to its users, so that users can easily enjoy a good read and re-gain the habit of reading.  
 
-#Mission
+### Mission
 - Users will enter 2-3 books that they have enjoyed in the past. The recommendation system would output 2~3 books that will likely match the users' taste.
 The main dataset comes from GoodReads(https://www.goodreads.com/list/show/1.Best_Books_Ever).
 
-
-#Success criteria
+### Success criteria
 - 1. Since we are working with unsupervised data and do not know how highly users will rate the book, the app will focus on 'Coverage' and 'Popularity' as the main criteria. We want the model to be able to cover 20% of the dataset to give a recommendation. Additionally, as high-rated books are more likely to be enjoyable to many, we want to calculate popularity by looking at the percentage of users who rate the item. 
 
 - 2. Business Metric: The app will show users the name of the book and link to the site where the user can purchase the book. In the longrun, we would like to record the click-through rate of the link and sales conversion rate as well. 
 
 
-# Data Aquisition
+## Data Aquisition
 The data can be downloaded via Kaggle's "goodreads books/author data" page. The data was gathered by webscraping goodreads website.
 Proper citation and source of the data is added below. 
 Ben Rosen (2019, January), goodreads books/author data, Version 1. Retrieved April 2nd, 2021 from https://www.kaggle.com/brosen255/goodreads-books.
