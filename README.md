@@ -19,6 +19,12 @@ The main dataset comes from GoodReads(https://www.goodreads.com/list/show/1.Best
 - 2. Business Metric: The app will show users the name of the book and link to the site where the user can purchase the book. In the longrun, we would like to record the click-through rate of the link and sales conversion rate as well. 
 
 
+# Data Aquisition
+The data can be downloaded via Kaggle's "goodreads books/author data" page. The data was gathered by webscraping goodreads website.
+Proper citation and source of the data is added below. 
+Ben Rosen (2019, January), goodreads books/author data, Version 1. Retrieved April 2nd, 2021 from https://www.kaggle.com/brosen255/goodreads-books.
+
+
 
 
 
