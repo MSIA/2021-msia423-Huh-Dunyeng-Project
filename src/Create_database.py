@@ -38,7 +38,6 @@ def create_db(engine_string: str) -> None:
 
 
 class BookshelfManager:
-
     def __init__(self, app=None, engine_string=None):
         """
         Args:

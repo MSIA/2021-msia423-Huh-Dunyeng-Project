@@ -9,12 +9,13 @@ logger = logging.getLogger(__name__)
 
 def upload_s3(df, filename, bucket_name="2021-msia423-huh-dunyeng"):
 
-    df.to_csv('s3://{0}/raw/{1}'.format(bucket_name,filename))
+    df.to_csv('s3://{0}/{1}'.format(bucket_name,filename), index=False)
     logger.info("upload dataframe")
+
 
 def download_s3(filename,bucket_name="2021-msia423-huh-dunyeng"):
 
-    downloaded_df = pd.read_csv('s3://{0}/raw/{1}'.format(bucket_name,filename))
+    downloaded_df = pd.read_csv('s3://{0}/{1}'.format(bucket_name,filename))
     logger.info("download dataframe")
     return downloaded_df
 

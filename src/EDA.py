@@ -11,7 +11,7 @@ def get_data(file="data/good_reads_final.csv"):
         df1 = pd.read_csv(file)
         logger.info("read df")
     except FileNotFoundError:
-        df1 = pd.read_csv("./"+file)
+        df1 = pd.read_csv("/usr/src/"+file)
     return df1
 
 
@@ -44,8 +44,9 @@ def clean_data(df1):
     logger.info("Normalization")
 
     df4 = df3.pivot_table(columns='book_title')
-    return df4
     logger.info("return pivoted data")
+    return df4
+
 
 
 if __name__ == '__main__':

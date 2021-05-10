@@ -22,7 +22,7 @@ if __name__ == '__main__':
     logger.info("Create sub-parser creating database")
 
     sb_ingest = subparsers.add_parser("s3", description="upload or download data to database")
-    sb_ingest.add_argument("--filename", default="raw_1", help="filename to be inserted into s3")
+    sb_ingest.add_argument("--filename", default="df", help="filename to be inserted into s3")
     sb_ingest.add_argument("--bucket_name", default="2021-msia423-huh-dunyeng", help="bucket name in s3")
 
     sb_ingest.add_argument("--download", default="download", help="download")
@@ -30,7 +30,7 @@ if __name__ == '__main__':
     sb_ingest.add_argument("--engine_string", default='sqlite:///data/bookshelf.db',
                            help="SQLAlchemy connection URI for database")
     logger.info("Create sub-parser ingesting new data")
-    
+
     print(os.getcwd())
     df1 = EDA.get_data()
 
@@ -39,7 +39,6 @@ if __name__ == '__main__':
     sp_used = args.subparser_name
     df4 = EDA.clean_data(df1)
     logger.info("Outputs a clean data after preprocessing")
-
 
     if sp_used == 'create_db':
         Create_database.create_db(args.engine_string)
