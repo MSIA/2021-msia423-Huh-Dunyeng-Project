@@ -91,142 +91,56 @@ https://www.kaggle.com/jealousleopard/goodreadsbooks
 ```
 
 ## Running the app
-### 1. Initialize the database 
+### 1. Build the docker image 
 
-#### Create the database 
-To create the database in the location configured in `config.py` run: 
+Build the Docker Image before running all the functionalities within this app 
 
-`python run.py create_db --engine_string=<engine_string>`
+`docker build -t dhl454msia423 .`
 
-By default, `python run.py create_db` creates a database at `sqlite:///data/tracks.db`.
+### 2. Data ingestion and storage
+To acquire the data (if applicable) and land it in S3, you can either 
 
-#### Adding songs 
-To add songs to the database:
+1) directly download from https://www.goodreads.com/list/show/1.Best_Books_Ever   to your s3
+2) use this line of code
 
-`python run.py ingest --engine_string=<engine_string> --artist=<ARTIST> --title=<TITLE> --album=<ALBUM>`
+`docker run -it     -e AWS_ACCESS_KEY_ID=KEY     -e AWS_SECRET_ACCESS_KEY=SECRET KEY     dhl454msia423 run.py s3 --download upload`
 
-By default, `python run.py ingest` adds *Minor Cause* by Emancipator to the SQLite database located in `sqlite:///data/tracks.db`.
 
-#### Defining your engine string 
-A SQLAlchemy database connection is defined by a string with the following format:
+#### 3. Create the database 
+To create the table in local SQLlite repo 
 
-`dialect+driver://username:password@host:port/database`
+`docker run -it  dhl454msia423 run.py create_db`
 
-The `+dialect` is optional and if not provided, a default is used. For a more detailed description of what `dialect` and `driver` are and how a connection is made, you can see the documentation [here](https://docs.sqlalchemy.org/en/13/core/engines.html). We will cover SQLAlchemy and connection strings in the SQLAlchemy lab session on 
-##### Local SQLite database 
 
-A local SQLite database can be created for development and local testing. It does not require a username or password and replaces the host and port with the path to the database file: 
+#### 4. Database Insertion
+To store the data inside S3 into a database of your choice using default settings, run the following code:
 
-```python
-engine_string='sqlite:///data/tracks.db'
+`docker run -it \
+    -e MYSQL_HOST=url \
+    -e MYSQL_PORT=3306 \
+    -e MYSQL_USER=user \
+    -e MYSQL_PASSWORD=psw \
+    -e MYSQL_DATABASE=msia423_db \
+    -e AWS_ACCESS_KEY_ID=keyid \
+    -e AWS_SECRET_ACCESS_KEY=key \
+    dhl454msia423 Create_database.py create_db`
 
+
+### 5. Database operations
+To create new users inside the database, run:
+
+```SQL
+CREATE USER 'msia423instructor'@'%' IDENTIFIED BY 'password';
 ```
 
-The three `///` denote that it is a relative path to where the code is being run (which is from the root of this directory).
-
-You can also define the absolute path with four `////`, for example:
-
-```python
-engine_string = 'sqlite://///Users/cmawer/Repos/2020-MSIA423-template-repository/data/tracks.db'
-```
-
-
-### 2. Configure Flask app 
-
-`config/flaskconfig.py` holds the configurations for the Flask app. It includes the following configurations:
-
-```python
-DEBUG = True  # Keep True for debugging, change to False when moving to production 
-LOGGING_CONFIG = "config/logging/local.conf"  # Path to file that configures Python logger
-HOST = "0.0.0.0" # the host that is running the app. 0.0.0.0 when running locally 
-PORT = 5000  # What port to expose app on. Must be the same as the port exposed in app/Dockerfile 
-SQLALCHEMY_DATABASE_URI = 'sqlite:///data/tracks.db'  # URI (engine string) for database that contains tracks
-APP_NAME = "penny-lane"
-SQLALCHEMY_TRACK_MODIFICATIONS = True 
-SQLALCHEMY_ECHO = False  # If true, SQL for queries made will be printed
-MAX_ROWS_SHOW = 100 # Limits the number of rows returned from the database 
-```
-
-### 3. Run the Flask app 
-
-To run the Flask app, run: 
-
-```bash
-python app.py
-```
-
-You should now be able to access the app at http://0.0.0.0:5000/ in your browser.
-
-## Running the app in Docker 
-
-### 1. Build the image 
-
-The Dockerfile for running the flask app is in the `app/` folder. To build the image, run from this directory (the root of the repo): 
-
-```bash
- docker build -f app/Dockerfile -t pennylane .
-```
-
-This command builds the Docker image, with the tag `pennylane`, based on the instructions in `app/Dockerfile` and the files existing in this directory.
- 
-### 2. Run the container 
-
-To run the app, run from this directory: 
-
-```bash
-docker run -p 5000:5000 --name test pennylane
-```
-You should now be able to access the app at http://0.0.0.0:5000/ in your browser.
-
-This command runs the `pennylane` image as a container named `test` and forwards the port 5000 from container to your laptop so that you can access the flask app exposed through that port. 
-
-If `PORT` in `config/flaskconfig.py` is changed, this port should be changed accordingly (as should the `EXPOSE 5000` line in `app/Dockerfile`)
-
-### 3. Kill the container 
+### 6. Kill the container 
 
 Once finished with the app, you will need to kill the container. To do so: 
 
 ```bash
-docker kill test 
+docker kill dhl454msia423 
 ```
 
-where `test` is the name given in the `docker run` command.
 
-### Example using `python3` as an entry point
-
-We have included another example of a Dockerfile, `app/Dockerfile_python` that has `python3` as the entry point such that when you run the image as a container, the command `python3` is run, followed by the arguments given in the `docker run` command after the image name. 
-
-To build this image: 
-
-```bash
- docker build -f app/Dockerfile_python -t pennylane .
-```
-
-then run the `docker run` command: 
-
-```bash
-docker run -p 5000:5000 --name test pennylane app.py
-```
-
-The new image defines the entry point command as `python3`. Building the sample PennyLane image this way will require initializing the database prior to building the image so that it is copied over, rather than created when the container is run. Therefore, please **do the step [Create the database with a single song](#create-the-database-with-a-single-song) above before building the image**.
-
-# Testing
-
-From within the Docker container, the following command should work to run unit tests when run from the root of the repository: 
-
-```bash
-python -m pytest
-``` 
-
-Using Docker, run the following, if the image has not been built yet:
-
-```bash
- docker build -f app/Dockerfile_python -t pennylane .
-```
-
-To run the tests, run: 
-
-```bash
- docker run penny -m pytest
 ```
  
