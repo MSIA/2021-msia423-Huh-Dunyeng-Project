@@ -28,7 +28,9 @@ Ben Rosen (2019, January), goodreads books/author data, Version 1. Retrieved Apr
 https://www.kaggle.com/jealousleopard/goodreadsbooks
 
 
-
+## Using the Application
+1) User selects a book that he/she has enjoyed from a drop down menu 
+2) Given the input, the book recommender model provides a recommendation to the user
 
 
 <!-- toc -->
