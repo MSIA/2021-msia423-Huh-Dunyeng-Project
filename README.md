@@ -13,7 +13,7 @@
 The main dataset comes from GoodReads(https://www.goodreads.com/list/show/1.Best_Books_Ever).
 
 ### Success criteria
-- 1. Since we are working with unsupervised data and do not know how highly users will rate the book, the app will focus on 'Coverage' and 'Popularity' as the main criteria. We want the model to be able to cover 20% of the dataset to give a recommendation. Additionally, as high-rated books are more likely to be enjoyable to many, we want to calculate popularity by looking at the percentage of users who rate the item. 
+- 1. Since we are working with unsupervised data and do not know how highly users will rate the book, the app will focus on 'Coverage' and 'Relativity' as the main criteria. We want the model to be able to cover 20% of the dataset to give a recommendation. Additionally, as we want the recommender system to recommend books that are highly-relevant, we want to calculate relativity by looking at the mean correlation for the 10 items that are recommended. 
 
 - 2. Business Metric: The app will show users the name of the book and link to the site where the user can purchase the book. In the longrun, we would like to record the click-through rate of the link and sales conversion rate as well. 
 
