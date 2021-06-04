@@ -56,11 +56,12 @@ https://www.kaggle.com/jealousleopard/goodreadsbooks
 
 ```
 ├── README.md                         <- You are here
-├── api
+├── app
 │   ├── static/                       <- CSS, JS files that remain static
 │   ├── templates/                    <- HTML (or other code) that is templated and changes based on a set of inputs
 │   ├── boot.sh                       <- Start up script for launching app in Docker container.
 │   ├── Dockerfile                    <- Dockerfile for building image to run app  
+│   ├── Dockerfile_python             <- Dockerfile   
 │
 ├── config                            <- Directory for configuration files 
 │   ├── local/                        <- Directory for keeping environment variables and other local configurations that *do not sync** to Github 
@@ -83,11 +84,16 @@ https://www.kaggle.com/jealousleopard/goodreadsbooks
 │   ├── archive/                      <- Develop notebooks no longer being used.
 │   ├── deliver/                      <- Notebooks shared with others / in final state
 │   ├── develop/                      <- Current notebooks being used in development.
-│   ├── template.ipynb                <- Template notebook for analysis with useful imports, helper functions, and SQLAlchemy setup. 
+│   ├── Template.ipynb                <- Template notebook for analysis with useful imports, helper functions, and SQLAlchemy setup. 
+│   ├── Recommender_System.ipynb      <- Jupyter notebook for building the recommender system
 │
 ├── reference/                        <- Any reference material relevant to the project
 │
 ├── src/                              <- Source data for the project 
+│   ├── Create_database.py            <- RDS setup
+│   ├── EDA.py                        <- Reads and clean data
+│   ├── recommender_book_list.py      <- Recommender System Model
+│   ├── Recommender System.ipynb      <- Template notebook for analysis with useful imports, helper functions, and SQLAlchemy setup. 
 │
 ├── test/                             <- Files necessary for running model tests (see documentation below) 
 │
