@@ -1,10 +1,15 @@
 import logging.config
-
+import sqlite3
 import sqlalchemy
+import pandas as pd
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, MetaData
 from sqlalchemy.orm import sessionmaker
 from flask_sqlalchemy import SQLAlchemy
+
+import mysql.connector
+
+
 
 logging.basicConfig(format='%(asctime)s%(name)-12s%(levelname)-8s%(message)s',
                     datefmt='%Y-%m-%d %I:%M:%S %p', level=logging.DEBUG)
@@ -35,6 +40,23 @@ def create_db(engine_string: str) -> None:
 
     Base.metadata.create_all(engine)
     logger.info("Database created.")
+
+
+def read_table(query, url, user, pwd, db, port, engine_string):
+    """
+            Function to read a SQL table into Python as a dataframe with the provided query
+            Args:
+                query = SQL query
+            Returns:
+                Pandas dataframe
+    """
+    if user is None and pwd is None:
+        conn = sqlite3.connect(engine_string)
+    else:
+        conn = mysql.connector.connect(host=url, user=user, password=pwd, database=db, port=port)
+    df = pd.read_sql(query,conn)
+
+    return df
 
 
 class BookshelfManager:

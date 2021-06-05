@@ -1,0 +1,5 @@
+export MYSQL_USER="DunyengHuh"
+export MYSQL_PASSWORD="lennon3928"
+export MYSQL_HOST="msia423-db.cmkqywpn0cl9.us-east-1.rds.amazonaws.com"
+export MYSQL_PORT="3306"
+

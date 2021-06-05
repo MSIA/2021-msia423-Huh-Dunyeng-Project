@@ -13,8 +13,8 @@ def recommend_book_list(bookname, df4):
     ordered_list = pd.DataFrame(book_like_bookname, columns=['Correlation'])
     ordered_list.dropna(inplace=True)
     # corr_temp.head()
-    output_df = ordered_list.sort_values('Correlation', ascending=False).head(10)
-    return output_df
+    output_df = ordered_list.sort_values('Correlation', ascending=False)[1:11]
+    return output_df.reset_index()
 
 
 if __name__ == '__main__':
