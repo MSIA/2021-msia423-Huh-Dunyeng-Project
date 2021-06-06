@@ -7,7 +7,7 @@ __pycache__/
 .log
 .ipynb_checkpoints/
 manifest.yml
-
+.mysqlconfig
 data/*
 !data/sample/
 !data/external/
