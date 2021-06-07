@@ -54,16 +54,19 @@ https://www.kaggle.com/jealousleopard/goodreadsbooks
 
 ```
 ├── README.md                         <- You are here
-├── api
+├── app
 │   ├── static/                       <- CSS, JS files that remain static
 │   ├── templates/                    <- HTML (or other code) that is templated and changes based on a set of inputs
 │   ├── boot.sh                       <- Start up script for launching app in Docker container.
 │   ├── Dockerfile                    <- Dockerfile for building image to run app  
+│   ├── Dockerfile_python             <- Dockerfile(python) for building image to run app  
 │
 ├── config                            <- Directory for configuration files 
 │   ├── local/                        <- Directory for keeping environment variables and other local configurations that *do not sync** to Github 
 │   ├── logging/                      <- Configuration of python loggers
 │   ├── flaskconfig.py                <- Configurations for Flask API 
+│
+├── copilot                           <- Directory for copilot files 
 │
 ├── data                              <- Folder that contains data used or generated. Only the external/ and sample/ subdirectories are tracked by git. 
 │   ├── external/                     <- External data sources, usually reference data,  will be synced with git
@@ -72,6 +75,8 @@ https://www.kaggle.com/jealousleopard/goodreadsbooks
 ├── deliverables/                     <- Any white papers, presentations, final work products that are presented or delivered to a stakeholder 
 │
 ├── docs/                             <- Sphinx documentation based on Python docstrings. Optional for this project. 
+│   ├── build/                        <- 
+│   ├── source/                       <- 
 │
 ├── figures/                          <- Generated graphics and figures to be used in reporting, documentation, etc
 │
