@@ -91,6 +91,10 @@ https://www.kaggle.com/jealousleopard/goodreadsbooks
 ├── reference/                        <- Any reference material relevant to the project
 │
 ├── src/                              <- Source data for the project 
+│   ├── Create_database.py            <- Create MySQL database
+│   ├── EDA.py                        <- Read data from AWS and clean data
+│   ├── recommend_book_list.py        <- Build the recommender system for the given user input
+│   ├── to_s3.py                      <- Upload and download data to and from S3 bucket. 
 │
 ├── test/                             <- Files necessary for running model tests (see documentation below) 
 │
