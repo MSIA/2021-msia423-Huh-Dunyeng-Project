@@ -7,16 +7,24 @@ logger = logging.getLogger(__name__)
 
 
 def get_data(file="data/good_reads_final.csv"):
+    """
+    input: location of the dataset
+    output: dataframe
+    """
     try:
         df1 = pd.read_csv(file)
         logger.info("read df")
     except FileNotFoundError:
         df1 = pd.read_csv("/usr/src/"+file)
+        logger.error("file not found from the default aws address")
     return df1
 
 
 def clean_data(df1):
-    # Data Cleansing
+    """
+    input: dataframe object read from the get_data() function
+    output: cleaned dataframe
+    """
 
     df1 = df1.replace(r'\n', '', regex=True)
     logger.info("get rid of '\n' in the title")
@@ -46,7 +54,6 @@ def clean_data(df1):
     df4 = df3.pivot_table(columns='book_title')
     logger.info("return pivoted data")
     return df4
-
 
 
 if __name__ == '__main__':

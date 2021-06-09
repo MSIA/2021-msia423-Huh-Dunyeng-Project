@@ -5,7 +5,6 @@ from flask import Flask
 from flask import render_template, request, redirect, url_for
 from config.flaskconfig import DB_HOST, DB_PORT, DB_USER, DB_PW, DATABASE, SQLALCHEMY_DATABASE_URI
 
-
 # Initialize the Flask application
 app = Flask(__name__, template_folder="app/templates", static_folder="app/static")
 
@@ -25,43 +24,35 @@ from src.EDA import get_data, clean_data
 
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
-# bookshelf_manager = BookshelfManager(app)
-
-
-
-# Purpose of the below functions
-# 1) Read data from s3 thru "get_data()"
-# 2) preprocess data using "clean_data()"
-# 3) Take user input + cleaned data to make a final recommendation
-# 4) Show the result
-
 
 @app.route('/')
 def form():
     return render_template('form.html')
+    logger.info("Get form template, which works as a baseline")
 
 
 @app.route('/', methods=['GET', 'POST'])
 def data():
-    #df1 = get_data()
-    #df4 = clean_data(df1)
-    URI = re.sub(r'sqlite:///','',SQLALCHEMY_DATABASE_URI)
+    URI = re.sub(r'sqlite:///', '', SQLALCHEMY_DATABASE_URI)
+    logger.info("Get URI")
 
     df1 = read_table("select * from msia423_db.raw_table1", DB_HOST, DB_USER, DB_PW, DATABASE, DB_PORT, URI)
+    logger.info("Query Raw Data from S3, if error check if data is in MySQL database")
     df4 = clean_data(df1)
+    logger.info("Clean Data for recommendation system")
 
     if request.method == 'POST':
-        # user_input = request.form.get("book_name")
         user_input = request.form.to_dict()['book_name']
         user_input = str(user_input)
-        # print(user_input)
+        logger.info("make user's input into a string to make it an input argument")
+
         try:
             recommendation = recommend_book_list(user_input, df4)
-            # print(recommendation)
-            # recommendation = recommendation.to_html(classes='dataframe', header="true", index=False)
+            logger.info("Provide recommendation for the given input")
 
             if len(recommendation) == 0:
                 return render_template('not_found.html', user_input=user_input)
+                logger.error("shows not_found page when the rec sys does not return recommendation ")
             else:
                 return render_template("index.html", recommendation=recommendation, user_input=user_input)
 
@@ -77,6 +68,8 @@ def add_entry():
     :return: redirect to index page
     """
     return render_template('error.html')
+    logger.info("show error.html page")
+
 
 if __name__ == '__main__':
     app.run(debug=app.config["DEBUG"], port=app.config["PORT"], host=app.config["HOST"])

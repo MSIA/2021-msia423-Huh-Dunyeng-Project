@@ -9,8 +9,6 @@ from flask_sqlalchemy import SQLAlchemy
 
 import mysql.connector
 
-
-
 logging.basicConfig(format='%(asctime)s%(name)-12s%(levelname)-8s%(message)s',
                     datefmt='%Y-%m-%d %I:%M:%S %p', level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -24,7 +22,7 @@ class Bookshelf(Base):
     __tablename__ = 'Book_Shelves'
     id = Column(Integer, primary_key=True)
     title = Column(String(100), unique=False, nullable=True)
-    #correlation = Column(Float, unique=False, nullable=True)
+    logger.info("Data model created.")
 
     def __repr__(self):
         return '<Bookshelf %r>' % self.title
@@ -44,17 +42,26 @@ def create_db(engine_string: str) -> None:
 
 def read_table(query, url, user, pwd, db, port, engine_string):
     """
-            Function to read a SQL table into Python as a dataframe with the provided query
-            Args:
-                query = SQL query
-            Returns:
-                Pandas dataframe
+    Function to read a SQL table into Python as a dataframe with the provided query
+    Args:
+        query = SQL query
+        url = SQLALCHEMY_DATABASE_URI
+        user = MYSQL_USER
+        pwd = MYSQL_PW
+        db = MYSQL_USER
+        port = MYSQL_PORT
+        engine_string = Engine String
+    Returns:
+        Pandas dataframe
     """
     if user is None and pwd is None:
         conn = sqlite3.connect(engine_string)
+        logger.info("if User and Password is None, connect with the default engine_string")
     else:
         conn = mysql.connector.connect(host=url, user=user, password=pwd, database=db, port=port)
+        logger.info("Else, use the given arguments to make connection")
     df = pd.read_sql(query,conn)
+    logger.info("with given arguments and query, return dataframe")
 
     return df
 
@@ -85,7 +92,6 @@ class BookshelfManager:
     def add_book(self, title: str) -> None:
         """Seeds an existing database with additional Books.
         Args: Title
-
         Returns:None
         """
 
