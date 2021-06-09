@@ -177,7 +177,7 @@ You should now be able to access the app at http://0.0.0.0:5000/ in your browser
 The Dockerfile for running the flask app is in the `app/` folder. To build the image, run from this directory (the root of the repo): 
 
 ```bash
- docker build -f app/Dockerfile -t pennylane .
+ docker build -f app/Dockerfile -t bookrecommender .
 ```
 
 This command builds the Docker image, with the tag `pennylane`, based on the instructions in `app/Dockerfile` and the files existing in this directory.
@@ -187,7 +187,7 @@ This command builds the Docker image, with the tag `pennylane`, based on the ins
 To run the app, run from this directory: 
 
 ```bash
-docker run -p 5000:5000 --name test pennylane
+docker run -p 5000:5000 --name test bookrecommender
 ```
 You should now be able to access the app at http://0.0.0.0:5000/ in your browser.
 
@@ -212,13 +212,13 @@ We have included another example of a Dockerfile, `app/Dockerfile_python` that h
 To build this image: 
 
 ```bash
- docker build -f app/Dockerfile_python -t pennylane .
+ docker build -f app/Dockerfile_python -t bookrecommender .
 ```
 
 then run the `docker run` command: 
 
 ```bash
-docker run -p 5000:5000 --name test pennylane app.py
+docker run -p 5000:5000 --name test bookrecommender app.py
 ```
 
 The new image defines the entry point command as `python3`. Building the sample PennyLane image this way will require initializing the database prior to building the image so that it is copied over, rather than created when the container is run. Therefore, please **do the step [Create the database with a single song](#create-the-database-with-a-single-song) above before building the image**.
@@ -234,13 +234,13 @@ python -m pytest
 Using Docker, run the following, if the image has not been built yet:
 
 ```bash
- docker build -f app/Dockerfile_python -t pennylane .
+ docker build -f app/Dockerfile_python -t bookrecommender .
 ```
 
 To run the tests, run: 
 
 ```bash
- docker run penny -m pytest
+ docker run bookrecommender -m pytest
 ```
  
  
