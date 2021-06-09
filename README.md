@@ -60,13 +60,15 @@ https://www.kaggle.com/jealousleopard/goodreadsbooks
 │   ├── static/                       <- CSS, JS files that remain static
 │   ├── templates/                    <- HTML (or other code) that is templated and changes based on a set of inputs
 │   ├── boot.sh                       <- Start up script for launching app in Docker container.
-│   ├── Dockerfile                    <- Dockerfile for building image to run app  
+│   ├── Dockerfile                    <- Dockerfile for building image to run app 
 │   ├── Dockerfile_python             <- Dockerfile   
 │
 ├── config                            <- Directory for configuration files 
 │   ├── local/                        <- Directory for keeping environment variables and other local configurations that *do not sync** to Github 
 │   ├── logging/                      <- Configuration of python loggers
 │   ├── flaskconfig.py                <- Configurations for Flask API 
+│
+├── copilot                           <- Directory for copilot files 
 │
 ├── data                              <- Folder that contains data used or generated. Only the external/ and sample/ subdirectories are tracked by git. 
 │   ├── external/                     <- External data sources, usually reference data,  will be synced with git
@@ -75,6 +77,8 @@ https://www.kaggle.com/jealousleopard/goodreadsbooks
 ├── deliverables/                     <- Any white papers, presentations, final work products that are presented or delivered to a stakeholder 
 │
 ├── docs/                             <- Sphinx documentation based on Python docstrings. Optional for this project. 
+│   ├── build/                        <- 
+│   ├── source/                       <- 
 │
 ├── figures/                          <- Generated graphics and figures to be used in reporting, documentation, etc
 │
@@ -90,10 +94,11 @@ https://www.kaggle.com/jealousleopard/goodreadsbooks
 ├── reference/                        <- Any reference material relevant to the project
 │
 ├── src/                              <- Source data for the project 
-│   ├── Create_database.py            <- RDS setup
-│   ├── EDA.py                        <- Reads and clean data
-│   ├── recommender_book_list.py      <- Recommender System Model
-│   ├── Recommender System.ipynb      <- Template notebook for analysis with useful imports, helper functions, and SQLAlchemy setup. 
+
+│   ├── Create_database.py            <- Create MySQL database
+│   ├── EDA.py                        <- Read data from AWS and clean data
+│   ├── recommend_book_list.py        <- Build the recommender system for the given user input
+│   ├── to_s3.py                      <- Upload and download data to and from S3 bucket. 
 │
 ├── test/                             <- Files necessary for running model tests (see documentation below) 
 │
@@ -145,14 +150,114 @@ To create new users inside the database, run:
 CREATE USER 'msia423instructor'@'%' IDENTIFIED BY 'password';
 ```
 
-### 6. Kill the container 
+
+You should now be able to access the app at http://0.0.0.0:5000/ in your browser.
+
+## Running the app in Docker 
+
+### 1. Build the image 
+
+The Dockerfile for running the flask app is in the `app/` folder. To build the image, run from this directory (the root of the repo): 
+
+```bash
+ docker build -f app/Dockerfile -t bookrecommender .
+```
+
+This command builds the Docker image, with the tag `pennylane`, based on the instructions in `app/Dockerfile` and the files existing in this directory.
+ 
+### 2. Run the container 
+
+To run the app, run from this directory: 
+
+```bash
+docker run -p 5000:5000 --name test bookrecommender
+```
+You should now be able to access the app at http://0.0.0.0:5000/ in your browser.
+
+This command runs the `pennylane` image as a container named `test` and forwards the port 5000 from container to your laptop so that you can access the flask app exposed through that port. 
+
+If `PORT` in `config/flaskconfig.py` is changed, this port should be changed accordingly (as should the `EXPOSE 5000` line in `app/Dockerfile`)
+
+### 3. Kill the container 
+
 
 Once finished with the app, you will need to kill the container. To do so: 
 
 ```bash
-docker kill dhl454msia423 
+
+docker kill test 
+```
+
+where `test` is the name given in the `docker run` command.
+
+### Example using `python3` as an entry point
+
+We have included another example of a Dockerfile, `app/Dockerfile_python` that has `python3` as the entry point such that when you run the image as a container, the command `python3` is run, followed by the arguments given in the `docker run` command after the image name. 
+
+To build this image: 
+
+```bash
+ docker build -f app/Dockerfile_python -t bookrecommender .
+```
+
+then run the `docker run` command: 
+
+```bash
+docker run -p 5000:5000 --name test bookrecommender app.py
+```
+
+The new image defines the entry point command as `python3`. Building the sample PennyLane image this way will require initializing the database prior to building the image so that it is copied over, rather than created when the container is run. Therefore, please **do the step [Create the database with a single song](#create-the-database-with-a-single-song) above before building the image**.
+
+# Testing
+
+From within the Docker container, the following command should work to run unit tests when run from the root of the repository: 
+
+```bash
+python -m pytest
+``` 
+
+Using Docker, run the following, if the image has not been built yet:
+
+```bash
+ docker build -f app/Dockerfile_python -t bookrecommender .
 ```
 
 
+```bash
+ docker run bookrecommender -m pytest
+
 ```
+ 
+ 
+## Launch with Established Database
+
+You already ingest the recommendation results into the database as described above. You should be able to launch the app with the following command. Note that the SQLALCHEMY_DATABASE_URI environment variable will determine which database the app connects to.
+
+```bash
+make docker-app-local
+```
+Now you should be able to access the app at http://0.0.0.0:5000/ in your browser.
+
+This command runs the pokeomn image as a container named test and forwards the port 5000 from container to your laptop so that you can access the flask app exposed through that port. If PORT in config/flaskconfig.py is changed, this port should be changed accordingly (as should the EXPOSE 5000 line in app/Dockerfile)
+
+Launch from Scratch
+If you have only built the two docker images but do not run the model pipeline and set up the database, you can do all of the and launch the app with the following.
+
+```bash
+make launch-in-one
+```
+Kill the container
+Once finished with the app, you will need to kill the container. To do so:
+
+```bash
+docker kill test 
+```
+
+Unit Test
+Unit tests are implemented when appropriate for modules in this project. You can run these tests with this command:
+
+```bash
+make test
+``` 
+ 
  

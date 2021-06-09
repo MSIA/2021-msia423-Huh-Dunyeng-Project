@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        .center {
+            text-align: center;
+        }
+
+        .center-img {
+          display: block;
+          margin-left: auto;
+          margin-right: auto;
+          width: 50%;
+          margin-top: 50px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <title>book</title>
+</head>
+
+<body>
+    <h2>
+        Book Recommender System for your Summer read-list
+    </h2>
+
+    <p>Welcome to the <b>Book recommender system</b>! </p>
+
+    <img src="{{url_for('static', filename='book_cover.jpg')}}"
+         alt="Book picture" height="520" class="center-img">
+
+    <p style="margin-top: 50px;"> Tell us about your favorite book and the system will suggest the 10 books that you are likely to enjoy.</p>
+
+    <div class="center">
+{#        <form action="/" method=post>#}
+        <form action="/" method=post>
+          <dl>
+            <input class="form-control form-control-lg" id="user_input_book" type="text" name='book_name' placeholder="Book Name">
+            <input type="submit" value="Search" class="btn btn-primary">
+          </dl>
+        </form>
+    </div>
+</body>
