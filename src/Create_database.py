@@ -82,6 +82,7 @@ class BookshelfManager:
             self.session = Session()
         else:
             raise ValueError("Need either an engine string or a Flask app to initialize")
+        logger.error("Need either an engine string or a Flask app to initialize")
 
     def close(self) -> None:
         """Closes session
@@ -89,14 +90,14 @@ class BookshelfManager:
         """
         self.session.close()
 
-    def add_book(self, title: str) -> None:
+    def add_book(self, input_path: str) -> None:
         """Seeds an existing database with additional Books.
         Args: Title
         Returns:None
         """
 
         session = self.session
-        book = Bookshelf(title=title)
+        book = Bookshelf(title=input_path)
         session.add(book)
         session.commit()
         logger.info("Book name %s is added to database", title)
