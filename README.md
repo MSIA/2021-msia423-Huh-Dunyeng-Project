@@ -13,7 +13,7 @@
 The main dataset comes from GoodReads(https://www.goodreads.com/list/show/1.Best_Books_Ever).
 
 ### Success criteria
-- 1. Since we are working with unsupervised data and do not know how highly users will rate the book, the app will focus on 'Coverage' and 'Popularity' as the main criteria. We want the model to be able to cover 20% of the dataset to give a recommendation. Additionally, as high-rated books are more likely to be enjoyable to many, we want to calculate popularity by looking at the percentage of users who rate the item. 
+- 1. Since we are working with unsupervised data and do not know how highly users will rate the book, the app will focus on 'Coverage' and 'Relativity' as the main criteria. We want the model to be able to cover 20% of the dataset to give a recommendation. Additionally, as we want the recommender system to recommend books that are highly-relevant, we want to calculate relativity by looking at the mean correlation for the 10 items that are recommended. 
 
 - 2. Business Metric: The app will show users the name of the book and link to the site where the user can purchase the book. In the longrun, we would like to record the click-through rate of the link and sales conversion rate as well. 
 
@@ -28,7 +28,9 @@ Ben Rosen (2019, January), goodreads books/author data, Version 1. Retrieved Apr
 https://www.kaggle.com/jealousleopard/goodreadsbooks
 
 
-
+## Application Overview
+1) User selects a book that he/she has enjoyed from a drop down menu 
+2) Given the input, the book recommender model provides a recommendation to the user
 
 
 <!-- toc -->
@@ -58,8 +60,8 @@ https://www.kaggle.com/jealousleopard/goodreadsbooks
 │   ├── static/                       <- CSS, JS files that remain static
 │   ├── templates/                    <- HTML (or other code) that is templated and changes based on a set of inputs
 │   ├── boot.sh                       <- Start up script for launching app in Docker container.
-│   ├── Dockerfile                    <- Dockerfile for building image to run app  
-│   ├── Dockerfile_python             <- Dockerfile(python) for building image to run app  
+│   ├── Dockerfile                    <- Dockerfile for building image to run app 
+│   ├── Dockerfile_python             <- Dockerfile   
 │
 ├── config                            <- Directory for configuration files 
 │   ├── local/                        <- Directory for keeping environment variables and other local configurations that *do not sync** to Github 
@@ -86,11 +88,13 @@ https://www.kaggle.com/jealousleopard/goodreadsbooks
 │   ├── archive/                      <- Develop notebooks no longer being used.
 │   ├── deliver/                      <- Notebooks shared with others / in final state
 │   ├── develop/                      <- Current notebooks being used in development.
-│   ├── template.ipynb                <- Template notebook for analysis with useful imports, helper functions, and SQLAlchemy setup. 
+│   ├── Template.ipynb                <- Template notebook for analysis with useful imports, helper functions, and SQLAlchemy setup. 
+│   ├── Recommender_System.ipynb      <- Jupyter notebook for building the recommender system
 │
 ├── reference/                        <- Any reference material relevant to the project
 │
 ├── src/                              <- Source data for the project 
+
 │   ├── Create_database.py            <- Create MySQL database
 │   ├── EDA.py                        <- Read data from AWS and clean data
 │   ├── recommend_book_list.py        <- Build the recommender system for the given user input
@@ -104,69 +108,48 @@ https://www.kaggle.com/jealousleopard/goodreadsbooks
 ```
 
 ## Running the app
-### 1. Initialize the database 
+### 1. Build the docker image 
 
-#### Create the database 
-To create the database in the location configured in `config.py` run: 
+Build the Docker Image before running all the functionalities within this app 
 
-`python run.py create_db --engine_string=<engine_string>`
+`docker build -t dhl454msia423 .`
 
-By default, `python run.py create_db` creates a database at `sqlite:///data/tracks.db`.
+### 2. Data ingestion and storage
+To acquire the data (if applicable) and land it in S3, you can either 
 
-#### Adding songs 
-To add songs to the database:
+1) directly download from https://www.goodreads.com/list/show/1.Best_Books_Ever   to your s3
+2) use this line of code
 
-`python run.py ingest --engine_string=<engine_string> --artist=<ARTIST> --title=<TITLE> --album=<ALBUM>`
+`docker run -it     -e AWS_ACCESS_KEY_ID=KEY     -e AWS_SECRET_ACCESS_KEY=SECRET KEY     dhl454msia423 run.py s3 --download upload`
 
-By default, `python run.py ingest` adds *Minor Cause* by Emancipator to the SQLite database located in `sqlite:///data/tracks.db`.
 
-#### Defining your engine string 
-A SQLAlchemy database connection is defined by a string with the following format:
+#### 3. Create the database 
+To create the table in local SQLlite repo 
 
-`dialect+driver://username:password@host:port/database`
+`docker run -it  dhl454msia423 run.py create_db`
 
-The `+dialect` is optional and if not provided, a default is used. For a more detailed description of what `dialect` and `driver` are and how a connection is made, you can see the documentation [here](https://docs.sqlalchemy.org/en/13/core/engines.html). We will cover SQLAlchemy and connection strings in the SQLAlchemy lab session on 
-##### Local SQLite database 
 
-A local SQLite database can be created for development and local testing. It does not require a username or password and replaces the host and port with the path to the database file: 
+#### 4. Database Insertion
+To store the data inside S3 into a database of your choice using default settings, run the following code:
 
-```python
-engine_string='sqlite:///data/tracks.db'
+`docker run -it \
+    -e MYSQL_HOST=url \
+    -e MYSQL_PORT=3306 \
+    -e MYSQL_USER=user \
+    -e MYSQL_PASSWORD=psw \
+    -e MYSQL_DATABASE=msia423_db \
+    -e AWS_ACCESS_KEY_ID=keyid \
+    -e AWS_SECRET_ACCESS_KEY=key \
+    dhl454msia423 Create_database.py create_db`
 
+
+### 5. Database operations
+To create new users inside the database, run:
+
+```SQL
+CREATE USER 'msia423instructor'@'%' IDENTIFIED BY 'password';
 ```
 
-The three `///` denote that it is a relative path to where the code is being run (which is from the root of this directory).
-
-You can also define the absolute path with four `////`, for example:
-
-```python
-engine_string = 'sqlite://///Users/cmawer/Repos/2020-MSIA423-template-repository/data/tracks.db'
-```
-
-
-### 2. Configure Flask app 
-
-`config/flaskconfig.py` holds the configurations for the Flask app. It includes the following configurations:
-
-```python
-DEBUG = True  # Keep True for debugging, change to False when moving to production 
-LOGGING_CONFIG = "config/logging/local.conf"  # Path to file that configures Python logger
-HOST = "0.0.0.0" # the host that is running the app. 0.0.0.0 when running locally 
-PORT = 5000  # What port to expose app on. Must be the same as the port exposed in app/Dockerfile 
-SQLALCHEMY_DATABASE_URI = 'sqlite:///data/tracks.db'  # URI (engine string) for database that contains tracks
-APP_NAME = "penny-lane"
-SQLALCHEMY_TRACK_MODIFICATIONS = True 
-SQLALCHEMY_ECHO = False  # If true, SQL for queries made will be printed
-MAX_ROWS_SHOW = 100 # Limits the number of rows returned from the database 
-```
-
-### 3. Run the Flask app 
-
-To run the Flask app, run: 
-
-```bash
-python app.py
-```
 
 You should now be able to access the app at http://0.0.0.0:5000/ in your browser.
 
@@ -197,9 +180,11 @@ If `PORT` in `config/flaskconfig.py` is changed, this port should be changed acc
 
 ### 3. Kill the container 
 
+
 Once finished with the app, you will need to kill the container. To do so: 
 
 ```bash
+
 docker kill test 
 ```
 
@@ -237,10 +222,10 @@ Using Docker, run the following, if the image has not been built yet:
  docker build -f app/Dockerfile_python -t bookrecommender .
 ```
 
-To run the tests, run: 
 
 ```bash
  docker run bookrecommender -m pytest
+
 ```
  
  
