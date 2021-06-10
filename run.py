@@ -6,6 +6,7 @@ import logging
 logging.config.fileConfig('config/logging/local.conf')
 logger = logging.getLogger('book-recommender-pipeline')
 
+from src.Create_database import BookshelfManager, create_db
 from config.flaskconfig import SQLALCHEMY_DATABASE_URI
 
 if __name__ == '__main__':
@@ -48,6 +49,9 @@ if __name__ == '__main__':
             logger.info("if given the condition download, download from s3")
         else:
             to_s3.upload_s3(df1, args.filename, args.bucket_name)
+            data = BookshelfManager(engine_string=args.engine_string)
+            data.add_book(args.input_path)
+            data.close()
             logger.info("if not, upload to s3")
     else:
         parser.print_help()
